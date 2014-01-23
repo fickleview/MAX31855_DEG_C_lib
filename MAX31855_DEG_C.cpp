@@ -6,7 +6,23 @@
  ***************************************************************************/
 
 /*
+
+Pinout:
+
+Arduino		Adafruit
+			MAX31855
+			
+GND			Gnd
+5V			5V
+no			3v3 // Not connected yo Arduino
+?			SS  // Typically digital 10
+
+12 			D0  // SPI MISO
+13 			SCK  // SPI SCK
+
+			
 http://www.maximintegrated.com/datasheet/index.mvp/id/7273/t/al
+
 
 D31   Sign - Thermal couple data
 D30 to D18 - 14 bit hot Thermal couple data 12 + 2 decimal .25 /bit
@@ -103,11 +119,11 @@ bool MAX31855_DEG_C::dataAvailable(int _CS)
     // 1 Fault - High = Open thermal couple circuit   
                   
 
-// returns 95 <> 700 in increments of 1
+// returns 90 <> 900 in increments of 1
 
 #ifdef DEBUG_DATA
 int fakeData = 90;
-int fakeDataHigh = 700;
+int fakeDataHigh = 900;
 int increment = 1;
 
 int fakeDecimal = 0;
