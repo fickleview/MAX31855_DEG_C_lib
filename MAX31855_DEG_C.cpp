@@ -6,7 +6,7 @@
  ***************************************************************************/
 
 /*
-http://www.adafruit.com/datasheets/MAX31855.pdf
+http://datasheets.maximintegrated.com/en/ds/DS18B20.pdf
 
 D31   Sign - Thermal couple data
 D30 to D18 - 14 bit hot Thermal couple data 12 + 2 decimal .25 /bit
