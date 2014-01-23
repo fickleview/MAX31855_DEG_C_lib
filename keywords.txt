@@ -12,8 +12,8 @@ MAX31855_DEG_C	KEYWORD1
 # Methods and Functions (KEYWORD2)
 #######################################
 
-faultOnReadTemp		KEYWORD2
-compTemp	      	KEYWORD2
+dataRead		KEYWORD2
+dataAvailable	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
