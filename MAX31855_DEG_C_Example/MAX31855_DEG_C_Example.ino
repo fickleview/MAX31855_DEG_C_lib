@@ -26,8 +26,9 @@ See examples.
 
 #define SS_PIN 6            // MAX31855 Thermal couple board select pin
 
- #define HOT_THERMO_SELECT      0   // Returns signed compensated Hot-External temperature in degrees C rounded to the nearest degree, no decimal bits
- #define HOT_THERMO_SELECT_DEC  3   // Returns decimal bits.  1= .25, 2= .50, 3= .75
+ #define HOT_THERMO_SELECT           0   // Returns signed compensated Hot-External temperature in degrees C rounded to the nearest degree, no decimal bits
+  #define HOT_THERMO_SELECT_NO_DEC   1   // Returns signed compensated Hot-External temperature in degrees C no decimal
+ #define HOT_THERMO_SELECT_DEC       3  // Returns decimal bits.  1= .25, 2= .50, 3= .75
 
 #define FAULT_THERMO_SELECT    4  // Returns the fault data as follows:
    #define FAULT_THERMO_SHORT_VCC 4
@@ -76,7 +77,7 @@ void updateLEDtempDisplay()
      Serial << F("ThermalCouple.dataRead(HOT_THERMO_SELECT): ") << ThermalCouple.dataRead(HOT_THERMO_SELECT) << endl;
      
      // Each decimal bit represents .25 degrees.
-     Serial << F("With decimal: ") << ThermalCouple.dataRead(HOT_THERMO_SELECT) << "." << 25 * ThermalCouple.dataRead(HOT_THERMO_SELECT_DEC) << endl << endl;
+     Serial << F("With decimal: ") << ThermalCouple.dataRead(HOT_THERMO_SELECT_NO_DEC) << "." << 25 * ThermalCouple.dataRead(HOT_THERMO_SELECT_DEC) << endl << endl;
 
      #endif
     }
