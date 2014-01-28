@@ -1,5 +1,5 @@
 /*************************************************************************** 
-  Library for the MAX31855* thermocouple chip from Maxim Semiconductor
+  Library for the MAX31855* Thermocouple chip from Maxim Semiconductor
   Written by S George Matthews with starting contributions from Cory J. Fowler
               MAX31855@fickleview.com     Rev 1.1
   BSD license, all text above must be included in any redistribution.
@@ -14,18 +14,21 @@ Arduino		Adafruit
 			
 GND			Gnd
 5V			5V
-no			3v3 // Not connected yo Arduino
-?			SS  // Typically digital 10
+no			3v3 // Not connected your Arduino. Available for other shield circuits.
+?			SS  // Pin used for Chip Select typicaly 10 with mmost shields that use SPI, 
+                // so select another pin to avoid SPI shield conflicts
+
 
 12 			D0  // SPI MISO
-13 			SCK  // SPI SCK
+13 			SCK // SPI SCK
+
 
 			
 http://www.maximintegrated.com/datasheet/index.mvp/id/7273/t/al
 
 
-D31   Sign - Thermal couple data
-D30 to D18 - 14 bit hot Thermal couple data 12 + 2 decimal .25 /bit
+D31   Sign - Thermocouple data
+D30 to D18 - 14 bit hot Thermocouple data 12 + 2 decimal .25 /bit
 
 D17 Reserved (ignore)
 
@@ -38,7 +41,7 @@ D3 Reserved (ignore)
 
 D2 Fault - High = Short to Vcc
 D1 Fault - High = Short to GND
-D0 Fault - High = Open thermal couple circuit
+D0 Fault - High = Open Thermocouple circuit
 
 */
 
@@ -67,7 +70,7 @@ MAX31855_DEG_C::MAX31855_DEG_C(int _CS)
 
 
 // Read the entire MAX31855 register which includes:
-// 12 bits plus 2 decimal bits, hot junction (thermal couple), 
+// 12 bits plus 2 decimal bits, hot junction (Thermocouple), 
 //  8 bits plus 4 decimal bits, cold junction  (internal) 
 //  3 fault bits
 //  WAIT AT LEAST 50mS between dataAvailable(int _CS) reads otherwise data will be faulty
@@ -83,7 +86,7 @@ bool MAX31855_DEG_C::dataAvailable(int _CS)
 {
   _data = 0;  // Always contains the entire raw 32 bit data read from MAX31855
 
-  digitalWrite(_CS, LOW);        // Select the thermalcouple chip
+  digitalWrite(_CS, LOW);        // Select the thermocouple chip stopping the continuous conversions every 80-100 mS
   delayMicroseconds(1);
 
 // Read 32 bits, 8 bits at a time
@@ -92,7 +95,7 @@ bool MAX31855_DEG_C::dataAvailable(int _CS)
     _data = (_data << 8) + SPI.transfer(0x00);  // 8 bits at a time, mode 0, shifting it up as we read
   }
 
-  digitalWrite(_CS, HIGH);      // De-Select the thermalcouple chip
+  digitalWrite(_CS, HIGH);      // De-Select the thermocouple chip and start internal conversions
 
  // Did we get any data?
  if(_data)                  
@@ -116,7 +119,7 @@ bool MAX31855_DEG_C::dataAvailable(int _CS)
 // 4 Returns the fault data:
     // 4 Fault - High = Short to Vcc
     // 2 Fault - High = Short to GND
-    // 1 Fault - High = Open thermal couple circuit   
+    // 1 Fault - High = Open Thermocouple circuit   
                   
 
 // returns 90 <> 900 in increments of 1
@@ -182,7 +185,7 @@ int MAX31855_DEG_C::dataRead(byte _selectData)
    else
   {
   // Hot Junction
-  _extractedDataH = _data >> 18 ;             // D31 to D18 last two bits decimal part
+  _extractedDataH = _data >> 18 ;           // D31 to D18 last two bits decimal part
   
   if(_selectData == 3)
   {
