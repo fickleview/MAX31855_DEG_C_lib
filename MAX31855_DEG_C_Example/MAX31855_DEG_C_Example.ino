@@ -2,7 +2,7 @@
 /*************************************************************************** 
   Library for the MAX31855* thermocouple chip from Maxim Semiconductor
   Written by S George Matthews with starting contributions from Cory J. Fowler
-              MAX31855@fickleview.com     Rev 1.2
+              MAX31855@fickleview.com     Rev 1.3
   BSD license, all text above must be included in any redistribution.
  **************************************************************************
  
@@ -92,10 +92,29 @@ void updateLEDtempDisplay()
     else
     {
       #ifdef DEBUG_TEMP
-     Serial << F("ThermalCouple.dataRead(HOT_THERMO_SELECT): ") << ThermalCouple.dataRead(HOT_THERMO_SELECT) << endl;
+     Serial << F("Hot ThermalCouple.dataRead(HOT_THERMO_SELECT): ") << ThermalCouple.dataRead(HOT_THERMO_SELECT) << endl;
      
      // Each decimal bit represents .25 degrees.
-     Serial << F("With decimal: ") << ThermalCouple.dataRead(HOT_THERMO_SELECT_NO_DEC) << "." << 25 * ThermalCouple.dataRead(HOT_THERMO_SELECT_DEC) << endl << endl;
+     Serial << F("Hot With decimal: ") << ThermalCouple.dataRead(HOT_THERMO_SELECT_NO_DEC) << "." << 25 * ThermalCouple.dataRead(HOT_THERMO_SELECT_DEC) << endl << endl;
+
+ // Each decimal bit represents .0625 degrees.
+     int  _coldThermoWithBits = ThermalCouple.dataRead(COLD_THERMO_SELECT_W_BITS);
+   
+     int  _coldBits = (_coldThermoWithBits & 0x0F); // Lower four bits
+     _coldBits = _coldBits * 625;  // make the bits printable as the decimal portion
+     
+     int _coldNoBits = _coldThermoWithBits >> 4;
+ 
+ 
+      Serial << F("Cold with decimal: ") << _coldNoBits << "." ; 
+     
+     if(_coldBits < 1000)
+     {
+      Serial << "0" ;  // insert a leading zero when .0625 
+     }
+     
+      Serial << _coldBits << endl << endl;
+    
 
      #endif
     }
