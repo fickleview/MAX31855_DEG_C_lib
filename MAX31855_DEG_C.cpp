@@ -56,8 +56,8 @@ D0 Fault - High = Open Thermocouple circuit
 // dataAvailable(int _CS) always true
 // It makes debugging you sketch much less painful.
 
-//#define DEBUG_DATA  
-
+//#define DEBUG_DATA  // Returns fake HOT temperatures in a range you define 
+//#define DEBUG_FAULT   // Prints raw _dat and fault bits on fault detect
 
 MAX31855_DEG_C::MAX31855_DEG_C(int _CS) 
 {
@@ -124,12 +124,13 @@ bool MAX31855_DEG_C::dataAvailable(int _CS)
 
 // returns 90 <> 900 in increments of 1
 
-#ifdef DEBUG_DATA
-int fakeData = 90;
-int fakeDataHigh = 900;
-int increment = 1;
 
-int fakeDecimal = 0;
+#ifdef DEBUG_DATA
+int fakeData     = 90;
+int fakeDataHigh = 900;
+int increment    = 1;
+
+int fakeDecimal      = 0;
 int decimalIncrement = 1;
 
 int MAX31855_DEG_C::dataRead(byte _selectData)
@@ -180,7 +181,18 @@ int MAX31855_DEG_C::dataRead(byte _selectData)
 {
  if(_selectData == 4)
  {
-   return (_data & 0x7);                    // Filter and return the lower three fault bits
+#ifdef DEBUG_FAULT
+long _faults = (_data & 0x7);
+
+ if(_faults)
+ {
+  Serial << "_data:"      << _data       << endl;
+  Serial << "Fault bits:" << _faults     << endl << endl;
+ }
+#endif // DEBUG_FAULT
+  
+    return (_data & 0x7);                    // Filter and return the lower three fault bits
+
   }
    else
   {

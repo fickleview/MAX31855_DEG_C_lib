@@ -29,7 +29,7 @@ class MAX31855_DEG_C
  private:
     void ReadSPI(void);
     
-    long long _data;
+    long  _data;
     long _extractedDataH;
     long _extractedDataC;
   
