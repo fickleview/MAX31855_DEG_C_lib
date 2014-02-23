@@ -12,7 +12,7 @@ MAX31855_DEG_C	KEYWORD1
 # Methods and Functions (KEYWORD2)
 #######################################
 
-dataRead		KEYWORD2
+dataRead	KEYWORD2
 dataAvailable	KEYWORD2
 
 #######################################
